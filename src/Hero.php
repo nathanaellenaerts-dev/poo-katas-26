@@ -91,6 +91,7 @@ final class Hero implements Fighter
     /** Doit renvoyer "Arthur (7/10 PV)". */
     public function __toString(): string
     {
-        return sprintf('%s (%d/%d PV)', $this->name, $this->hp, $this->maxHp);
+        return sprintf('%s (%d/%d PV)', $this->name, $this->hp, $this->maxHp); 
+        
     }
 }
