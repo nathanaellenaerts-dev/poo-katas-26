@@ -1,3 +1,4 @@
+[![Tests](https://github.com/nathanaellenaerts-dev/poo-katas-26/actions/workflows/tests.yml/badge.svg)](https://github.com/nathanaellenaerts-dev/poo-katas-26/actions/workflows/tests.yml)
 # Les katas du Donjon (poo-katas-26)
 
 Les exercices du bloc POO de 5XCOS. **Un groupe de tests = un chapitre.** Vous ne
