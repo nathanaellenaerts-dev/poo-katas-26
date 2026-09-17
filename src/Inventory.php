@@ -18,8 +18,7 @@ final class Inventory implements \Countable, \IteratorAggregate
     /** Le poids maximum transportable, fixé à la création : readonly. */
     public function __construct(
         public readonly float $maxWeight = 20.0,
-    ) {
-    }
+    ) {}
 
     /**
      * Doit ajouter l'objet et renvoyer true.
@@ -28,31 +27,52 @@ final class Inventory implements \Countable, \IteratorAggregate
      */
     public function add(Item $item): bool
     {
-        throw new \LogicException('À implémenter');
+        if ($this->totalWeight() + $item->weight > $this->maxWeight) {
+            return false;
+        }
+
+        $this->items[] = $item;
+        return true;
     }
 
     /** Doit dire si un objet portant ce nom est dans le sac. */
     public function has(string $name): bool
     {
-        throw new \LogicException('À implémenter');
+        foreach ($this->items as $item) {
+            if ($name === $item->name) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Doit retirer le premier objet portant ce nom (et ne rien faire s'il n'y est pas). */
     public function remove(string $name): void
     {
-        throw new \LogicException('À implémenter');
+        foreach ($this->items as $index => $item) {
+            if ($item->name === $name) {
+                unset($this->items[$index]);
+                break;
+            }
+        }
     }
 
     /** Doit renvoyer le nombre d'objets dans le sac. */
     public function count(): int
     {
-        throw new \LogicException('À implémenter');
+        return count($this->items);
     }
 
     /** Doit renvoyer la somme des poids. */
     public function totalWeight(): float
     {
-        throw new \LogicException('À implémenter');
+        $total = 0.0;
+
+        foreach ($this->items as $item) {
+            $total += $item->weight;
+        }
+
+        return $total;
     }
 
     /**

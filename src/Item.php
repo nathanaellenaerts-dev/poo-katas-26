@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dungeon;
 
+use InvalidArgumentException;
+
 /**
  * Un objet ramassable. Classe simple au niveau 2, ABSTRAITE au niveau 3 :
  * on ne ramasse jamais "un objet", on ramasse une arme ou une potion.
@@ -19,7 +21,9 @@ abstract class Item implements \Stringable
         public readonly float $weight,
         public readonly Rarity $rarity = Rarity::Common,
     ) {
-        throw new \LogicException('À implémenter');
+        if($weight<0)
+            {
+        throw new InvalidArgumentException("Un poids n'est pas négatif, $weight recu");};
     }
 
     /** Doit renvoyer poids × multiplicateur de rareté (règle du jeu, arbitraire). Niveau 4. */

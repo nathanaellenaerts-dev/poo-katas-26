@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dungeon;
 
+use InvalidArgumentException;
+
 /**
  * Le personnage joueur. Niveau 1, complété au chapitre Encapsulation puis aux niveaux 2, 3 et 4.
  * Fighter (niveau 4) : le contrat commun avec les monstres.
@@ -21,14 +23,17 @@ final class Hero implements Fighter
      * Chapitre Encapsulation : ajouter un hook `set` qui borne la valeur entre 0 et $maxHp,
      * pour que takeDamage() et heal() n'aient plus à s'en soucier.
      */
-    public private(set) int $hp = 0;
+    public private(set) int $hp = 0 {
+        set => max(0, min($this->maxHp, $value));
+    }
+
 
     /**
      * Propriété virtuelle (hook `get`, rien n'est stocké) : doit valoir true quand
      * hp est égal à maxHp. Chapitre Encapsulation.
      */
     public bool $isFullHealth {
-        get => throw new \LogicException('À implémenter');
+        get => $this->hp === $this->maxHp;
     }
 
     /** Le sac, créé dans le constructeur : composition. Jamais remplacé, donc readonly. Niveau 2. */
@@ -48,21 +53,30 @@ final class Hero implements Fighter
         int $maxHp = 10,
         public readonly int $strength = 2,
     ) {
+        if(trim($name)=== "")
+            {
+                throw new \InvalidArgumentException("un héros a un nom");
+            }
+            if ($maxHp<1)
+                {
+                    throw new InvalidArgumentException("maxHp doit valoir au moins 1, $maxHp reçu.");
+                }
         $this->maxHp = $maxHp;
         $this->hp = $maxHp;
+        $this->inventory= new Inventory();
     }
 
     /** Doit retirer $amount points de vie, sans jamais descendre sous 0. */
     public function takeDamage(int $amount): void
     {
-        $this->hp = max(0, $this->hp - $amount);
+        $this->hp -= $amount;
     }
 
-    /** Doit rendre $amount points de vie, sans jamais dépasser $maxHp. */
     public function heal(int $amount): void
     {
-        $this->hp = min($this->maxHp, $this->hp + $amount);
+        $this->hp += $amount;
     }
+
 
     /** Doit renvoyer true tant qu'il reste au moins 1 point de vie. */
     public function isAlive(): bool
